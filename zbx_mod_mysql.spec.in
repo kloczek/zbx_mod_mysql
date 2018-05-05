@@ -1,0 +1,49 @@
+# Global macros and bconds:
+%define		_zbxmoddir	%{expand:%(pkg-config zabbix-1.0 --variable=LoadModulePath)}
+%define		_sysconfdir	%{expand:%(pkg-config zabbix-1.0 --variable=sysconfdir)}
+
+Summary:	Zabbix agent loadable module MySQL extenson
+Name:		zbx_mod_mysql
+Version:	@VERSION@
+Release:	1%{?dist}
+License:	GPL v2+
+Source0:	zbx_mod_mysql-%{version}.tar.xz
+URL:		https://www.zabbix.com/
+BuildRequires:	pkgconfig
+BuildRequires:	zabbix-devel
+Requires:	zabbix-agentd
+
+%description
+Zabbix agent loadable module MySQL extenson.
+It provides set of additional zabbix agent keys to monitor MySQL engine.
+
+%prep
+%autosetup -p1
+
+%build
+%configure \
+	LDFLAGS="-Wl,--as-needed"
+%make_build
+
+%install
+%make_install
+
+%check
+%__make check
+
+%post
+%systemd_post zabbix-agent.service
+
+%postun
+%systemd_postun_with_restart zabbix-agent.service
+
+%files
+%doc AUTHORS ChangeLog NEWS README
+%license COPYING
+%{_sysconfdir}/zabbix_agentd.d/LoadModule=zbx_mod_mysql.so
+%attr(755,root,root) %{_zbxmoddir}/zbx_mod_mysql.so
+%exclude %{_zbxmoddir}/*.la
+
+%changelog
+* Thu Feb 2 2017 Tomasz Kłoczko <kloczek@fedoraproject.org> - 1.0.0-1%{?dist}
+- initial version.
