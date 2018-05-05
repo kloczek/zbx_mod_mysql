@@ -1,5 +1,5 @@
 # Global macros and bconds:
-%define		_zbxmoddir	%{expand:%(pkg-config zabbix-1.0 --variable=LoadModulePath)}
+%define		_zbxmoddir	%{expand:%(pkg-config zabbix-1.0 --variable=modulesdir)}
 %define		_sysconfdir	%{expand:%(pkg-config zabbix-1.0 --variable=sysconfdir)}
 
 Summary:	Zabbix agent loadable module MySQL extenson
@@ -40,7 +40,7 @@ It provides set of additional zabbix agent keys to monitor MySQL engine.
 %files
 %doc AUTHORS ChangeLog NEWS README
 %license COPYING
-%{_sysconfdir}/zabbix_agentd.d/LoadModule=zbx_mod_mysql.so
+%{_sysconfdir}/zabbix_agentd/LoadModule=zbx_mod_mysql.so
 %attr(755,root,root) %{_zbxmoddir}/zbx_mod_mysql.so
 %exclude %{_zbxmoddir}/*.la
 
