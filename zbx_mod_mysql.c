@@ -26,7 +26,7 @@ static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
 				       AGENT_RESULT * result);
 
 static ZBX_METRIC keys[] =
-/*	KEY			FLAG		FUNCTION	TEST PARAMETERS */
+/*	KEY, FLAG, FUNCTION, TEST PARAMETERS */
 {
 	{"mysql.db.discovery", 0, zbx_mod_mysql_db_discovery, ""},
 	{NULL}
