@@ -17,7 +17,9 @@ ltmain.sh
 m4/
 missing
 stamp-h1
+zbx_mod_mysql-*.tar.gz
 zbx_mod_mysql-*.tar.xz
 zbx_mod_mysql.la
 zbx_mod_mysql.spec
 *.lo
+*~
