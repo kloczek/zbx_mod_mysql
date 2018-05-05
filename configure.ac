@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([zbx_mod_mysql],
-	[0.0.0],
+	[0.1.0],
 	[https://github.com/kloczek/zbx_mod_mysql/issues],
 	[],
 	[https://github.com/kloczek/zbx_mod_mysql])
