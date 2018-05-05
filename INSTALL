@@ -1,0 +1,89 @@
+This directory contains zabbix MySQL loadable module, which extends
+functionality of the Zabbix Agent.
+
+Included build framework immplemened full software package maintenance cycle
+of source code consisting from:
+
+- building binary files on development stage
+- final verification before release and package source tar ball
+- building rpm package straight from source tar ball
+- automatic embedding installed rpm package into configuration of the main
+  Zabbix packages
+
+To build it you need to have the following rpm packages installed:
+
+- autoconf
+- automake
+- gcc
+- glibc-devel
+- pkgconfig
+- rpm-build
+- xz
+- zabbix-devel
+
+Description of steps necessary to:
+- prepare source code tree build automation:
+
+autoreconf -fiv
+
+- compile module:
+
+./configure <params>; make
+
+- install:
+
+make install [DESTDIR=<install_prefix>]
+
+- generate clean tested distribution source tar ball:
+
+make distcheck
+
+- generate rpm packages (binary and source as well) from generated tar ball
+
+rpmbuild -ta zbx_mod_mysql-<version>.tar.xz
+
+- install generated package 
+
+rpm -Uvh zbx_mod_mysql-<version>-1.<arch>.rpm
+
+If you want to publish generated package(s) into an rpm repository you need to
+install the anaconda package which will provide zbx_mod_mysql package.
+You need to create a directory to store the binary package and
+afterwards to copy the rpm file into it you must update your repository indexes by:
+
+createrepo <repo_directory>
+
+It is good to create <repo_directory>/old directory and move after
+release of the new package old binary packages to <repo_directory>/old
+directory to hold in single repo current and older packages.
+To upgrade package on systems which have registered in dnf/yum repo you
+need to execute:
+
+yum upgrade zbx_mod_mysql
+
+or:
+
+dnf upgrade zbx_mod_mysql
+
+As long as new and previous package will be in the same repository if anything will
+be wrong with upgraded package availability as long as older binary package
+is indexed by repository all what is really necessary to execute is:
+
+yum downgrade zbx_mod_mysql
+
+or:
+
+dnf downgrade zbx_mod_mysql
+
+RPM package has registered LoadModule=zbx_mod_mysql.so configuration file
+which will be installed in <sysconfdir>/zabbix_agentd.d directory. If
+zabbix_agentd.conf file has uncommented line like:
+
+Include=<sysconfdir>/zabbix_agentd.d
+
+this configuration file will be automatically added to agent configuration
+so no manual operations will be needed to update agent setup.
+
+kloczek
+-- 
+Tomasz Kłoczko <kloczek@fedoraproject.org>, May 2018
