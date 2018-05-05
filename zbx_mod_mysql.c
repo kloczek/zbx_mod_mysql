@@ -53,10 +53,6 @@ static ZBX_METRIC keys[] =
 static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
 				       AGENT_RESULT * result)
 {
-	param = get_rparam (request, 0);
-
-	SET_STR_RESULT (result, strdup (param));
-
 	return SYSINFO_RET_OK;
 }
 
