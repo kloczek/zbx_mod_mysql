@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS			= -I m4
 AM_DISTCHEC_CONFIGURE_FLAGS	= \
 	--enable-maintainer-mode
 
-modules_LTLIBRARIES 		= zbx_mod_mysql.la zbx_mod_dummy.la.
+modules_LTLIBRARIES 		= zbx_mod_mysql.la
 modulesdir			= $(ZBX_MODULESDIR)
 
 zbx_config_DATA			= LoadModule=zbx_mod_mysql.so

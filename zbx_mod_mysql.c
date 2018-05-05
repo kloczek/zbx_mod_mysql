@@ -187,8 +187,7 @@ ZBX_METRIC *zbx_module_item_list (void)
 
 int zbx_module_init (void)
 {
-	/* initialization for dummy.random */
-	/* srand(time(NULL)); */
+	/* initialization */
 
 	return ZBX_MODULE_OK;
 }
