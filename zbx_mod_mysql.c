@@ -24,7 +24,6 @@
 static int item_timeout = 0;
 
 static int dummy_echo (AGENT_REQUEST * request, AGENT_RESULT * result);
-static int dummy_random (AGENT_REQUEST * request, AGENT_RESULT * result);
 
 static ZBX_METRIC keys[] =
 /*	KEY			FLAG		FUNCTION	TEST PARAMETERS */
