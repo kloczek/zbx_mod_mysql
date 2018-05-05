@@ -33,6 +33,24 @@ static ZBX_METRIC keys[] =
 	{NULL}
 };
 
+static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
+{
+	char	*param;
+
+	if (1 != request->nparam)
+	{
+		/* set optional error message */
+		SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
+		return SYSINFO_RET_FAIL;
+	}
+
+	param = get_rparam(request, 0);
+
+	SET_STR_RESULT(result, strdup(param));
+
+	return SYSINFO_RET_OK;
+}
+
 /******************************************************************************
  *                                                                            *
  * Function: zbx_module_api_version                                           *
@@ -75,24 +93,6 @@ void	zbx_module_item_timeout(int timeout)
 ZBX_METRIC	*zbx_module_item_list(void)
 {
 	return keys;
-}
-
-static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
-{
-	char	*param;
-
-	if (1 != request->nparam)
-	{
-		/* set optional error message */
-		SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
-		return SYSINFO_RET_FAIL;
-	}
-
-	param = get_rparam(request, 0);
-
-	SET_STR_RESULT(result, strdup(param));
-
-	return SYSINFO_RET_OK;
 }
 
 /******************************************************************************
