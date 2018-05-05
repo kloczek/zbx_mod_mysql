@@ -1,0 +1,5 @@
+configure.ac			linguist-language=autoconf
+.indent.pro			text
+LoadModule=zbx_mod_mysql.so	text
+Makefile.am			linguist-language=automake
+*md				text
