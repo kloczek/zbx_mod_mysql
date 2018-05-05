@@ -13,7 +13,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
- Copyright 2018 Tomasz Kłoczko
+ Copyright (C) 2018 Tomasz Kłoczko <kloczek@fedoraproject.org>
 */
 
 #include "sysinc.h"
@@ -24,17 +24,113 @@ static int item_timeout = 0;
 
 static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
 				       AGENT_RESULT * result);
+static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
+					AGENT_RESULT * result);
+static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
+					   AGENT_RESULT * result);
+static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
+					     AGENT_RESULT * result);
 
 static ZBX_METRIC keys[] =
 /*	KEY, FLAG, FUNCTION, TEST PARAMETERS */
 {
-	{"mysql.db.discovery", 0, zbx_mod_mysql_db_discovery, ""},
+	{"mysql.db.discovery", 0, zbx_mod_mysql_db_discovery, NULL},
+	{"mysql.global_status", CF_HAVEPARAMS, zbx_mod_mysql_global_status, ""},
+	{"mysql.global_variables", CF_HAVEPARAMS,
+	 zbx_mod_mysql_global_variables, ""},
+	{"mysql.performance_schema", CF_HAVEPARAMS,
+	 zbx_mod_mysql_performance_schema, ""},
 	{NULL}
 };
+
+/******************************************************************************
+ Function:	zbx_mod_mysql_db_discovery
+
+ Purpose:	
+ Return value:	
+*******************************************************************************/
 
 static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
 				       AGENT_RESULT * result)
 {
+	param = get_rparam (request, 0);
+
+	SET_STR_RESULT (result, strdup (param));
+
+	return SYSINFO_RET_OK;
+}
+
+/******************************************************************************
+ Function:	zbx_mod_mysql_global_status
+
+ Purpose:	
+ Return value:	
+*******************************************************************************/
+
+static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
+					AGENT_RESULT * result)
+{
+	char *param;
+
+	if (1 != request->nparam) {
+		/* set optional error message */
+		SET_MSG_RESULT (result,
+				strdup ("Invalid number of parameters."));
+		return SYSINFO_RET_FAIL;
+	}
+
+	param = get_rparam (request, 0);
+
+	SET_STR_RESULT (result, strdup (param));
+
+	return SYSINFO_RET_OK;
+}
+
+/******************************************************************************
+ Function:	zbx_mod_mysql_global_variables
+
+ Purpose:	
+ Return value:	
+*******************************************************************************/
+
+static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
+					   AGENT_RESULT * result)
+{
+	char *param;
+
+	if (1 != request->nparam) {
+		/* set optional error message */
+		SET_MSG_RESULT (result,
+				strdup ("Invalid number of parameters."));
+		return SYSINFO_RET_FAIL;
+	}
+
+	param = get_rparam (request, 0);
+
+	SET_STR_RESULT (result, strdup (param));
+
+	return SYSINFO_RET_OK;
+}
+
+/******************************************************************************
+ Function:	zbx_mod_mysql_performance_schema
+
+ Purpose:	
+ Return value:	
+*******************************************************************************/
+
+static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
+					     AGENT_RESULT * result)
+{
+	char *param;
+
+	if (1 != request->nparam) {
+		/* set optional error message */
+		SET_MSG_RESULT (result,
+				strdup ("Invalid number of parameters."));
+		return SYSINFO_RET_FAIL;
+	}
+
 	param = get_rparam (request, 0);
 
 	SET_STR_RESULT (result, strdup (param));
