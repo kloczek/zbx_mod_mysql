@@ -23,18 +23,13 @@
 /* the variable keeps timeout setting for item processing */
 static int	item_timeout = 0;
 
-/* module SHOULD define internal functions as static and use a naming pattern different from Zabbix internal */
-/* symbols (zbx_*) and loadable module API functions (zbx_module_*) to avoid conflicts                       */
-static int	dummy_ping(AGENT_REQUEST *request, AGENT_RESULT *result);
 static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result);
 static int	dummy_random(AGENT_REQUEST *request, AGENT_RESULT *result);
 
 static ZBX_METRIC keys[] =
 /*	KEY			FLAG		FUNCTION	TEST PARAMETERS */
 {
-	{"dummy.ping",		0,		dummy_ping,	NULL},
 	{"dummy.echo",		CF_HAVEPARAMS,	dummy_echo,	"a message"},
-	{"dummy.random",	CF_HAVEPARAMS,	dummy_random,	"1,1000"},
 	{NULL}
 };
 
@@ -82,13 +77,6 @@ ZBX_METRIC	*zbx_module_item_list(void)
 	return keys;
 }
 
-static int	dummy_ping(AGENT_REQUEST *request, AGENT_RESULT *result)
-{
-	SET_UI64_RESULT(result, 1);
-
-	return SYSINFO_RET_OK;
-}
-
 static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
 {
 	char	*param;
@@ -103,60 +91,6 @@ static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
 	param = get_rparam(request, 0);
 
 	SET_STR_RESULT(result, strdup(param));
-
-	return SYSINFO_RET_OK;
-}
-
-/******************************************************************************
- *                                                                            *
- * Function: dummy_random                                                     *
- *                                                                            *
- * Purpose: a main entry point for processing of an item                      *
- *                                                                            *
- * Parameters: request - structure that contains item key and parameters      *
- *              request->key - item key without parameters                    *
- *              request->nparam - number of parameters                        *
- *              request->timeout - processing should not take longer than     *
- *                                 this number of seconds                     *
- *              request->params[N-1] - pointers to item key parameters        *
- *                                                                            *
- *             result - structure that will contain result                    *
- *                                                                            *
- * Return value: SYSINFO_RET_FAIL - function failed, item will be marked      *
- *                                 as not supported by zabbix                 *
- *               SYSINFO_RET_OK - success                                     *
- *                                                                            *
- * Comment: get_rparam(request, N-1) can be used to get a pointer to the Nth  *
- *          parameter starting from 0 (first parameter). Make sure it exists  *
- *          by checking value of request->nparam.                             *
- *                                                                            *
- ******************************************************************************/
-static int	dummy_random(AGENT_REQUEST *request, AGENT_RESULT *result)
-{
-	char	*param1, *param2;
-	int	from, to;
-
-	if (2 != request->nparam)
-	{
-		/* set optional error message */
-		SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
-		return SYSINFO_RET_FAIL;
-	}
-
-	param1 = get_rparam(request, 0);
-	param2 = get_rparam(request, 1);
-
-	/* there is no strict validation of parameters for simplicity sake */
-	from = atoi(param1);
-	to = atoi(param2);
-
-	if (from > to)
-	{
-		SET_MSG_RESULT(result, strdup("Invalid range specified."));
-		return SYSINFO_RET_FAIL;
-	}
-
-	SET_UI64_RESULT(result, from + rand() % (to - from + 1));
 
 	return SYSINFO_RET_OK;
 }
