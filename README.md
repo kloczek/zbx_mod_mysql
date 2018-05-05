@@ -4,7 +4,8 @@ This module uses automake, autoconf, libtool and pkgconfig build framework propo
 
 ## Changelog
 0.1.0
-initial release which bases on zabbix dummy.c and contains:
+
+Initial release which bases on zabbix dummy.c and contains:
 - fully working and tested build framework which passes test of
 ```
 ./boostrap.sh
