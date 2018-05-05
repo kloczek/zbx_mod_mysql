@@ -21,32 +21,32 @@
 #include "module.h"
 
 /* the variable keeps timeout setting for item processing */
-static int	item_timeout = 0;
+static int item_timeout = 0;
 
-static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result);
-static int	dummy_random(AGENT_REQUEST *request, AGENT_RESULT *result);
+static int dummy_echo (AGENT_REQUEST * request, AGENT_RESULT * result);
+static int dummy_random (AGENT_REQUEST * request, AGENT_RESULT * result);
 
 static ZBX_METRIC keys[] =
 /*	KEY			FLAG		FUNCTION	TEST PARAMETERS */
 {
-	{"dummy.echo",		CF_HAVEPARAMS,	dummy_echo,	"a message"},
+	{"dummy.echo", CF_HAVEPARAMS, dummy_echo, "a message"},
 	{NULL}
 };
 
-static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
+static int dummy_echo (AGENT_REQUEST * request, AGENT_RESULT * result)
 {
-	char	*param;
+	char *param;
 
-	if (1 != request->nparam)
-	{
+	if (1 != request->nparam) {
 		/* set optional error message */
-		SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
+		SET_MSG_RESULT (result,
+				strdup ("Invalid number of parameters."));
 		return SYSINFO_RET_FAIL;
 	}
 
-	param = get_rparam(request, 0);
+	param = get_rparam (request, 0);
 
-	SET_STR_RESULT(result, strdup(param));
+	SET_STR_RESULT (result, strdup (param));
 
 	return SYSINFO_RET_OK;
 }
@@ -62,7 +62,7 @@ static int	dummy_echo(AGENT_REQUEST *request, AGENT_RESULT *result)
  *               MUST be compiled with the same version of this header file   *
  *                                                                            *
  ******************************************************************************/
-int	zbx_module_api_version(void)
+int zbx_module_api_version (void)
 {
 	return ZBX_MODULE_API_VERSION;
 }
@@ -76,7 +76,7 @@ int	zbx_module_api_version(void)
  * Parameters: timeout - timeout in seconds, 0 - no timeout set               *
  *                                                                            *
  ******************************************************************************/
-void	zbx_module_item_timeout(int timeout)
+void zbx_module_item_timeout (int timeout)
 {
 	item_timeout = timeout;
 }
@@ -90,7 +90,7 @@ void	zbx_module_item_timeout(int timeout)
  * Return value: list of item keys                                            *
  *                                                                            *
  ******************************************************************************/
-ZBX_METRIC	*zbx_module_item_list(void)
+ZBX_METRIC *zbx_module_item_list (void)
 {
 	return keys;
 }
@@ -108,10 +108,10 @@ ZBX_METRIC	*zbx_module_item_list(void)
  * Comment: the module won't be loaded in case of ZBX_MODULE_FAIL             *
  *                                                                            *
  ******************************************************************************/
-int	zbx_module_init(void)
+int zbx_module_init (void)
 {
 	/* initialization for dummy.random */
-	srand(time(NULL));
+	srand (time (NULL));
 
 	return ZBX_MODULE_OK;
 }
@@ -127,7 +127,7 @@ int	zbx_module_init(void)
  *               ZBX_MODULE_FAIL - function failed                            *
  *                                                                            *
  ******************************************************************************/
-int	zbx_module_uninit(void)
+int zbx_module_uninit (void)
 {
 	return ZBX_MODULE_OK;
 }
