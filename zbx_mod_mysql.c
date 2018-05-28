@@ -47,7 +47,9 @@ static ZBX_METRIC keys[] =
  Function:	zbx_mod_mysql_db_discovery
 
  Purpose:	
- Return value:	
+ Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
+			as not supported by zabbix
+		SYSINFO_RET_OK - success
 *******************************************************************************/
 
 static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
@@ -60,7 +62,9 @@ static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
  Function:	zbx_mod_mysql_global_status
 
  Purpose:	
- Return value:	
+ Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
+			as not supported by zabbix
+		SYSINFO_RET_OK - success
 *******************************************************************************/
 
 static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
@@ -86,7 +90,9 @@ static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
  Function:	zbx_mod_mysql_global_variables
 
  Purpose:	
- Return value:	
+ Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
+			as not supported by zabbix
+		SYSINFO_RET_OK - success
 *******************************************************************************/
 
 static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
@@ -112,7 +118,9 @@ static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
  Function:	zbx_mod_mysql_performance_schema
 
  Purpose:	
- Return value:	
+ Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
+			as not supported by zabbix
+		SYSINFO_RET_OK - success
 *******************************************************************************/
 
 static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
