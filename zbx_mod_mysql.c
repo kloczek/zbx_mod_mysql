@@ -16,8 +16,14 @@
  Copyright (C) 2018 Tomasz Kłoczko <kloczek@fedoraproject.org>
 */
 
-#include "sysinc.h"
-#include "module.h"
+#include <stdarg.h>
+#include <time.h>
+
+#include <common.h>
+#include <log.h>
+#include <module.h>
+
+#include <mysql.h>
 
 /* the variable keeps timeout setting for item processing */
 static int item_timeout = 0;
@@ -192,6 +198,9 @@ ZBX_METRIC *zbx_module_item_list (void)
 int zbx_module_init (void)
 {
 	/* initialization */
+	zabbix_log (LOG_LEVEL_INFORMATION,
+		    "[mod_zbx_mysql]: MySQL client library version: %s",
+		    mysql_get_client_info ());
 
 	return ZBX_MODULE_OK;
 }
