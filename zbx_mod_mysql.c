@@ -85,7 +85,7 @@ static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
 	if (1 != request->nparam) {
 		/* set optional error message */
 		SET_MSG_RESULT (result,
-				strdup ("Invalid number of parameters."));
+				strdup ("Invalid number of parameters"));
 		return SYSINFO_RET_FAIL;
 	}
 
@@ -113,7 +113,7 @@ static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
 	if (1 != request->nparam) {
 		/* set optional error message */
 		SET_MSG_RESULT (result,
-				strdup ("Invalid number of parameters."));
+				strdup ("Invalid number of parameters"));
 		return SYSINFO_RET_FAIL;
 	}
 
@@ -141,7 +141,7 @@ static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
 	if (1 != request->nparam) {
 		/* set optional error message */
 		SET_MSG_RESULT (result,
-				strdup ("Invalid number of parameters."));
+				strdup ("Invalid number of parameters"));
 		return SYSINFO_RET_FAIL;
 	}
 
@@ -210,7 +210,7 @@ ZBX_METRIC *zbx_module_item_list (void)
 
 int zbx_module_init (void)
 {
-	/* initialization */
+	/* check and report MySQL client library version */
 	zabbix_log (LOG_LEVEL_INFORMATION,
 		    "[mod_zbx_mysql]: MySQL client library version: %s",
 		    mysql_get_client_info ());
