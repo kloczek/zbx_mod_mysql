@@ -49,6 +49,27 @@ static ZBX_METRIC keys[] =
 	{NULL}
 };
 
+/* zbx_mod_mysql is written to interract onl;y with one database */
+typedef struct {
+	MYSQL *connection;
+	char *server;
+	char *account;
+	char *password;
+	unsigned short port;
+} ZBX_MOD_MYSQL_INFO;
+
+ZBX_MOD_MYSQL_INFO zbx_mod_mysql_info = {
+	NULL,
+	"localhost",
+	"monitoring",
+	"monitoring",
+	3306
+};
+
+/* Other internal routines */
+int zbx_mod_myslq_connect_db ();
+void zbx_mod_mysql_close_db ();
+
 /******************************************************************************
  Zabbix items backend routines
 ******************************************************************************\
@@ -153,9 +174,60 @@ static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
 }
 
 /******************************************************************************
- Other functions
+ Other internal routines
 ******************************************************************************\
 
+/******************************************************************************
+ Function:	zbx_mod_myslq_connect_db
+
+ Purpose:	Check whether the connection is permanently open and if not try
+		to open it. If it fails return with error
+ Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
+			as not supported by zabbix
+		SYSINFO_RET_OK - success
+*******************************************************************************/
+int zbx_mod_myslq_connect_db ()
+{
+	if (zbx_mod_mysql_info.connection == NULL) {
+		zbx_mod_mysql_info.connection = mysql_init (NULL);
+		if (mysql_real_connect (zbx_mod_mysql_info.connection,
+					zbx_mod_mysql_info.server,
+					zbx_mod_mysql_info.account,
+					zbx_mod_mysql_info.password,
+					NULL, zbx_mod_mysql_info.port, NULL, 0)
+		    ) {
+			zabbix_log (LOG_LEVEL_WARNING,
+				    "[zbx_mod_mysql]: zbx_mod_mysql_init_db(): "
+				    "A persistent connection established");
+			return SYSINFO_RET_OK;
+		} else {
+			zabbix_log (LOG_LEVEL_ERR,
+				    "[zbx_mod_mysql]: mysql_real_connect() error: %s",
+				    mysql_error
+				    (zbx_mod_mysql_info.connection));
+			zbx_mod_mysql_close_db ();
+			return SYSINFO_RET_FAIL;
+		}
+	} else {
+		return SYSINFO_RET_OK;
+	}
+}
+
+/******************************************************************************
+ Function:	zbx_mod_mysql_close_db
+
+ Purpose:	Disconnect database and set zbx_mod_mysql_info.connection
+		to NULL
+ Return value:	Nothing
+*******************************************************************************/
+void zbx_mod_mysql_close_db ()
+{
+	if (zbx_mod_mysql_info.connection) {
+		/* disconnect database */
+		mysql_close (zbx_mod_mysql_info.connection);
+		zbx_mod_mysql_info.connection = NULL;
+	}
+}
 
 /******************************************************************************
  Zabbix loadable module standard ABI routines
@@ -215,6 +287,9 @@ int zbx_module_init (void)
 		    "[mod_zbx_mysql]: MySQL client library version: %s",
 		    mysql_get_client_info ());
 
+	/* try to open persistent database connection */
+	zbx_mod_myslq_connect_db ();
+
 	return ZBX_MODULE_OK;
 }
 
@@ -229,5 +304,7 @@ int zbx_module_init (void)
 
 int zbx_module_uninit (void)
 {
+	zbx_mod_mysql_close_db ();
+
 	return ZBX_MODULE_OK;
 }
