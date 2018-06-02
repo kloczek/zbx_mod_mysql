@@ -284,7 +284,7 @@ int zbx_module_init (void)
 {
 	/* check and report MySQL client library version */
 	zabbix_log (LOG_LEVEL_INFORMATION,
-		    "[mod_zbx_mysql]: MySQL client library version: %s",
+		    "[zbx_mod_mysqll]: MySQL client library version: %s",
 		    mysql_get_client_info ());
 
 	/* try to open persistent database connection */
