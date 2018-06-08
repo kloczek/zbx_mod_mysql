@@ -196,7 +196,7 @@ int zbx_mod_myslq_connect_db ()
 					zbx_mod_mysql_info.password,
 					NULL, zbx_mod_mysql_info.port, NULL, 0)
 		    ) {
-			zabbix_log (LOG_LEVEL_WARNING,
+			zabbix_log (LOG_LEVEL_DEBUG,
 				    "[zbx_mod_mysql]: zbx_mod_mysql_init_db(): "
 				    "A persistent connection established");
 			return SYSINFO_RET_OK;
