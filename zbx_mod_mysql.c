@@ -273,8 +273,9 @@ ZBX_METRIC *zbx_module_item_list (void)
 /******************************************************************************
  Function:	zbx_module_init
 
- Purpose:	the function is called on agent startup
-		It should be used to call any initialization routines
+ Purpose:	The function is called on agent startup.
+		It opens persistent database conectivity and reports to the agent
+		logs MySQl client library and server version.
  Return value:	ZBX_MODULE_OK - success
 		ZBX_MODULE_FAIL - module initialization failed
  Comment:	the module won't be loaded in case of ZBX_MODULE_FAIL
@@ -282,13 +283,15 @@ ZBX_METRIC *zbx_module_item_list (void)
 
 int zbx_module_init (void)
 {
-	/* check and report MySQL client library version */
-	zabbix_log (LOG_LEVEL_INFORMATION,
-		    "[zbx_mod_mysql]: MySQL client library version: %s",
-		    mysql_get_client_info ());
-
-	/* try to open persistent database connection */
-	zbx_mod_myslq_connect_db ();
+	if (zbx_mod_myslq_connect_db () == SYSINFO_RET_OK) {
+		zabbix_log (LOG_LEVEL_INFORMATION,
+			    "[zbx_mod_mysql]: client library version : %s",
+			    mysql_get_client_info ());
+		zabbix_log (LOG_LEVEL_INFORMATION,
+			    "[zbx_mod_mysql]: server version         : %s",
+			    mysql_get_server_info (zbx_mod_mysql_info.
+						   connection));
+	}
 
 	return ZBX_MODULE_OK;
 }
