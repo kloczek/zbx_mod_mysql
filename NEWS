@@ -11,5 +11,5 @@ rpmbuild -ta zbx_mod_mysql-0.1.0.tar.xz --nodeps
   - placeholders for module keys:
     - mysql.db.discovery[]
     - mysql.global_status[]
-    - mysql.global_variables[]
+    - mysql.global_variable[]
     - mysql.performance_schema[]

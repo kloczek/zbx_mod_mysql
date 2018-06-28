@@ -32,8 +32,8 @@ static int zbx_mod_mysql_db_discovery (AGENT_REQUEST * request,
 				       AGENT_RESULT * result);
 static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
 					AGENT_RESULT * result);
-static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
-					   AGENT_RESULT * result);
+static int zbx_mod_mysql_global_variable (AGENT_REQUEST * request,
+					  AGENT_RESULT * result);
 static int zbx_mod_mysql_performance_schema (AGENT_REQUEST * request,
 					     AGENT_RESULT * result);
 
@@ -42,8 +42,8 @@ static ZBX_METRIC keys[] =
 {
 	{"mysql.db.discovery", 0, zbx_mod_mysql_db_discovery, NULL},
 	{"mysql.global_status", CF_HAVEPARAMS, zbx_mod_mysql_global_status, ""},
-	{"mysql.global_variables", CF_HAVEPARAMS,
-	 zbx_mod_mysql_global_variables, ""},
+	{"mysql.global_variable", CF_HAVEPARAMS,
+	 zbx_mod_mysql_global_variable, ""},
 	{"mysql.performance_schema", CF_HAVEPARAMS,
 	 zbx_mod_mysql_performance_schema, ""},
 	{NULL}
@@ -118,7 +118,7 @@ static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
 }
 
 /******************************************************************************
- Function:	zbx_mod_mysql_global_variables
+ Function:	zbx_mod_mysql_global_variable
 
  Purpose:	
  Return value:	SYSINFO_RET_FAIL - function failed, item will be marked
@@ -126,8 +126,8 @@ static int zbx_mod_mysql_global_status (AGENT_REQUEST * request,
 		SYSINFO_RET_OK - success
 *******************************************************************************/
 
-static int zbx_mod_mysql_global_variables (AGENT_REQUEST * request,
-					   AGENT_RESULT * result)
+static int zbx_mod_mysql_global_variable (AGENT_REQUEST * request,
+					  AGENT_RESULT * result)
 {
 	char *param;
 
