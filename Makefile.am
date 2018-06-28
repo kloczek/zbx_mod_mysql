@@ -22,4 +22,3 @@ EXTRA_DIST			= \
 	$(zbx_config_DATA) \
 	zbx_mod_mysql.spec \
 	zbx_mod_mysql.spec.in
-
