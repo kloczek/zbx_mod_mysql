@@ -289,8 +289,8 @@ int zbx_module_init (void)
 			    mysql_get_client_info ());
 		zabbix_log (LOG_LEVEL_INFORMATION,
 			    "[zbx_mod_mysql]: server version         : %s",
-			    mysql_get_server_info (zbx_mod_mysql_info.
-						   connection));
+			    mysql_get_server_info
+			    (zbx_mod_mysql_info.connection));
 	}
 
 	return ZBX_MODULE_OK;
